@@ -55,6 +55,8 @@ public class ProfileController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+
     @Operation(summary = "Obtiene el arrendatario por id")
     @GetMapping("/tenant/{id}")
     public ResponseEntity<ProfileResponse> getTenantById(@PathVariable Long id) {

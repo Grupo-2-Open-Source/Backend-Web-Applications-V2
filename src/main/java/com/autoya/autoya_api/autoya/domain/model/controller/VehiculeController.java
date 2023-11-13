@@ -145,10 +145,28 @@ public class VehiculeController {
         }
 
         List<Vehicule> ownerVehicles = vehicleRepository.findByOwner_Id(ownerId);
-        List<VehiculeResponse> responseList = ownerVehicles.stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
-
+        List<VehiculeResponse> responseList =new ArrayList<>();
+        for (Vehicule vehicule : ownerVehicles) {
+            VehiculeResponse response = new VehiculeResponse();
+            response.setId(vehicule.getId());
+            response.setBrand(vehicule.getBrand());
+            response.setModel(vehicule.getModel());
+            response.setMaxVelocity(vehicule.getMaxVelocity());
+            response.setFuelConsumption(vehicule.getFuelConsumption());
+            response.setDimensions(vehicule.getDimensions());
+            response.setWeight(vehicule.getWeight());
+            response.setCarClass(vehicule.getCarClass());
+            response.setCarTransmission(vehicule.getCarTransmission());
+            response.setImageUrl(vehicule.getImageUrl());
+            response.setRentStatus(vehicule.getRentStatus());
+            response.setLocation(vehicule.getLocation());
+            response.setPrice(vehicule.getPrice());
+            response.setTime(vehicule.getTime());
+            response.setAmoutthetime(vehicule.getAmoutthetime());
+            response.setOwnerId(vehicule.getOwner().getId());
+            response.setOwnerphone(vehicule.getOwner().getPhoneNumber());
+            responseList.add(response);
+        }
         return new ResponseEntity<>(responseList, HttpStatus.OK);
     }
 
