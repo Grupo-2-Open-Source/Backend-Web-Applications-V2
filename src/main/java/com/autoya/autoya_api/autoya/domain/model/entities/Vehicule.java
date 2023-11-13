@@ -37,24 +37,24 @@ public class Vehicule {
 
     private String location;
     private Integer price;
+
     private String time;
     private Long amoutthetime;
+
     private String imageUrl;
     @Enumerated(EnumType.STRING)
     private RentStatus rentStatus;
     public Vehicule() {
         this.rentStatus = RentStatus.WAITING;
     }
-
     @ManyToOne
     @JoinColumn(name = "owner_id")
-    private Owner owner; // Relación con el propietario
+    private Owner owner;
     @ManyToOne
     @JoinColumn(name = "tenant_id")
-    private Tenant tenant; // Relación con el arrendatario (si el vehículo está alquilado)
+    private Tenant tenant;
 
     @OneToOne(mappedBy = "vehicle")
     private Contract contract;
 
-    // Constructores, getters y setters generados automáticamente por Lombok
 }

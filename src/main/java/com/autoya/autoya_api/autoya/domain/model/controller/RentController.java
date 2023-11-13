@@ -20,8 +20,9 @@ import java.util.Date;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/rentals")
+@RequestMapping("/api/v1/rentals")
 public class RentController {
+
     @Autowired
     private RentalRepository rentalRepository;
     @Autowired
@@ -180,14 +181,11 @@ public class RentController {
     public ResponseEntity<?> getConfirmedRentalDetails(
             @PathVariable Long ownerId,
             @PathVariable String vehicleId) {
-        // Buscar el vehículo con el id proporcionado
         Optional<Vehicule> optionalVehicle = vehiculeRepository.findById(vehicleId);
 
         if (optionalVehicle.isPresent()) {
             Vehicule vehicle = optionalVehicle.get();
-            // Verificar que el rentStatus sea CONFIRMED
             if (vehicle.getRentStatus() == RentStatus.CONFIRMED) {
-                // Validar que el vehículo pertenece al owner
                 if (vehicle.getOwner().getId().equals(ownerId)) {
                     PaymentResponse paymentResponse = new PaymentResponse();
                     paymentResponse.setPrice(vehicle.getPrice());

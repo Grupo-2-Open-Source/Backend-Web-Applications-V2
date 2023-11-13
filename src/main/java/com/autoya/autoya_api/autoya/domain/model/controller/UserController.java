@@ -3,6 +3,7 @@ package com.autoya.autoya_api.autoya.domain.model.controller;
 import com.autoya.autoya_api.autoya.domain.model.entities.Owner;
 import com.autoya.autoya_api.autoya.domain.model.entities.Tenant;
 import com.autoya.autoya_api.autoya.domain.model.valueobjects.LoginRequest;
+import com.autoya.autoya_api.autoya.domain.model.valueobjects.LoginResponse;
 import com.autoya.autoya_api.autoya.domain.model.valueobjects.RegisterRequest;
 import com.autoya.autoya_api.autoya.infraestructure.persistence.jpa.repositories.OwnerRepository;
 import com.autoya.autoya_api.autoya.infraestructure.persistence.jpa.repositories.TenantRepository;
@@ -60,18 +61,21 @@ public class UserController {
 
     @Operation(summary = "Logeo de propietario")
     @PostMapping("/login/owner")
-    public ResponseEntity<String> loginOwner(@RequestBody LoginRequest loginRequest) {
-        Owner owner = ownerRepository.findByEmail(loginRequest.getUsername());
+    public ResponseEntity<LoginResponse> loginOwner(@RequestBody LoginRequest loginRequest) {
+        Owner owner = ownerRepository.findByEmail(loginRequest.getEmail());
         if (owner != null && owner.getPassword().equals(loginRequest.getPassword())) {
-            return new ResponseEntity<>("Inicio de sesión exitoso para el propietario.", HttpStatus.OK);
+            // Inicio de sesión exitoso
+            LoginResponse response = new LoginResponse("EXITOSO",owner.getId());
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
-        return new ResponseEntity<>("Credenciales incorrectas. Inicio de sesión fallido.", HttpStatus.UNAUTHORIZED);
+        LoginResponse errorResponse = new LoginResponse( "Fallo de inicio de sesion",null);
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
     @Operation(summary = "Logeo de arrendatario")
     @PostMapping("/login/tenant")
     public ResponseEntity<String> loginTenant(@RequestBody LoginRequest loginRequest) {
-        Tenant tenant = tenantRepository.findByEmail(loginRequest.getUsername());
+        Tenant tenant = tenantRepository.findByEmail(loginRequest.getEmail());
         if (tenant != null && tenant.getPassword().equals(loginRequest.getPassword())) {
             return new ResponseEntity<>("Inicio de sesión exitoso para el arrendatario.", HttpStatus.OK);
         }

@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface VehiculeRepository extends JpaRepository<Vehicule, String> {
-    List<Vehicule> findByBrandAndModelAndMaxVelocityAndFuelConsumptionAndDimensionsAndWeightAndCarClassAndCarTransmissionAndLocationAndPriceAndRentTime(
+    List<Vehicule> findByBrandAndModelAndMaxVelocityAndFuelConsumptionAndDimensionsAndWeightAndCarClassAndCarTransmissionAndLocationAndPriceAndTimeAndAmoutthetime(
             String brand,
             String model,
             Integer maxVelocity,
@@ -19,7 +19,8 @@ public interface VehiculeRepository extends JpaRepository<Vehicule, String> {
             CarTransmision carTransmission,
             String location,
             Integer price,
-            String rentTime
+            String time,
+            Long  amoutthetime
     );
 
     List<Vehicule> findByOwner_Id(Long ownerId);

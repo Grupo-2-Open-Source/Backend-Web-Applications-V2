@@ -17,5 +17,7 @@ public class VehiculeSearchRequest {
     private CarTransmision carTransmission;
     private String location;
     private Integer price;
-    private String rentTime;
+    private String time;
+    private Long amoutthetime;
+
 }

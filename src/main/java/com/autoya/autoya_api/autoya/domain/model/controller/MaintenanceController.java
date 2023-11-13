@@ -29,7 +29,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/maintenances")
+@RequestMapping("/api/v1/maintenances")
 public class MaintenanceController {
 
 

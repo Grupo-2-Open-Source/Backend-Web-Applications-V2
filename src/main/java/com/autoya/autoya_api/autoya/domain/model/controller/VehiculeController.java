@@ -97,7 +97,7 @@ public class VehiculeController {
     @Operation(summary = "Buscar vehiculos por parametros")
     @PostMapping("/owner/search")
     public ResponseEntity<List<VehiculeResponse>> searchVehicles(@RequestBody VehiculeSearchRequest searchRequest) {
-        List<Vehicule> foundVehicles = vehicleRepository.findByBrandAndModelAndMaxVelocityAndFuelConsumptionAndDimensionsAndWeightAndCarClassAndCarTransmissionAndLocationAndPriceAndRentTime(
+        List<Vehicule> foundVehicles = vehicleRepository.findByBrandAndModelAndMaxVelocityAndFuelConsumptionAndDimensionsAndWeightAndCarClassAndCarTransmissionAndLocationAndPriceAndTimeAndAmoutthetime(
                 searchRequest.getBrand(),
                 searchRequest.getModel(),
                 searchRequest.getMaxVelocity(),
@@ -108,7 +108,8 @@ public class VehiculeController {
                 searchRequest.getCarTransmission(),
                 searchRequest.getLocation(),
                 searchRequest.getPrice(),
-                searchRequest.getRentTime()
+                searchRequest.getTime(),
+                searchRequest.getAmoutthetime()
         );
         List<VehiculeResponse> responseList = foundVehicles.stream()
                 .map(this::mapToResponse)
@@ -207,7 +208,6 @@ public class VehiculeController {
     public ResponseEntity<VehiculeResponseContract> getVehiculeAndOwnerDetails(
             @PathVariable String vehicleId,
             @PathVariable Long ownerId) {
-        // Buscar el vehículo por su ID
         Vehicule vehicule = vehicleRepository.findById(vehicleId).orElse(null);
 
         if (vehicule == null) {
@@ -224,8 +224,8 @@ public class VehiculeController {
 
         Owner owner = vehicule.getOwner();
         response.setOwnerId(owner.getId());
-        response.setOwnername(owner.getFullName()); // Asumiendo un método para obtener el nombre del propietario
-        response.setOwnerphone(owner.getPhoneNumber()); // Asumiendo un método para obtener el teléfono del propietario
+        response.setOwnername(owner.getFullName());
+        response.setOwnerphone(owner.getPhoneNumber());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
