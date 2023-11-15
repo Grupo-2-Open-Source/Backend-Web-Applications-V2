@@ -74,12 +74,21 @@ public class UserController {
 
     @Operation(summary = "Logeo de arrendatario")
     @PostMapping("/login/tenant")
-    public ResponseEntity<String> loginTenant(@RequestBody LoginRequest loginRequest) {
-        Tenant tenant = tenantRepository.findByEmail(loginRequest.getEmail());
+    public ResponseEntity<LoginResponse> loginTenant(@RequestBody LoginRequest loginRequest) {
+        /*Tenant tenant = tenantRepository.findByEmail(loginRequest.getEmail());
         if (tenant != null && tenant.getPassword().equals(loginRequest.getPassword())) {
             return new ResponseEntity<>("Inicio de sesión exitoso para el arrendatario.", HttpStatus.OK);
         }
-        return new ResponseEntity<>("Credenciales incorrectas. Inicio de sesión fallido.", HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>("Credenciales incorrectas. Inicio de sesión fallido.", HttpStatus.UNAUTHORIZED);*/
+
+        Tenant tenant = tenantRepository.findByEmail(loginRequest.getEmail());
+        if (tenant != null && tenant.getPassword().equals(loginRequest.getPassword())) {
+            // Inicio de sesión exitoso
+            LoginResponse response = new LoginResponse("EXITOSO",tenant.getId());
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        LoginResponse errorResponse = new LoginResponse( "Fallo de inicio de sesion",null);
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
 }
