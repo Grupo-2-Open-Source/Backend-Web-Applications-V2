@@ -7,26 +7,16 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
-@Setter
-@Getter
 @Entity
-public class Rent {
+@Getter
+@Setter
+public class CriminalRecords {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "vehicle_id")
-    private Vehicule vehicle;
-
-    @ManyToOne
-    @JoinColumn(name = "owner_id")
-    private Owner owner;
-
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "tenant_id")
     private Tenant tenant;
-    private Date startDate;
-    private Date endDate;
+    private String pdf;
 }

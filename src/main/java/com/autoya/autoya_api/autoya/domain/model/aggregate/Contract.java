@@ -22,6 +22,5 @@ public class Contract {
     @JoinColumn(name = "owner_id")
     private Owner owner;
 
-    @Lob
-    private byte[] pdf;
+    private String pdf;
 }

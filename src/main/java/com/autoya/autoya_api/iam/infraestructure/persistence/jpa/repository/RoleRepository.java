@@ -8,7 +8,7 @@ import javax.management.relation.Role;
 import java.util.Optional;
 
 @Repository
-public interface RoleRepository extends JpaRepository <Role,Long> {
+public interface RoleRepository  {
     /**
      * This method is responsible for finding  the roles by name
      * @param name the role name

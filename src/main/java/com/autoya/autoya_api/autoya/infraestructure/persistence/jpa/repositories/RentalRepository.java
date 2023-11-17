@@ -11,5 +11,6 @@ import java.util.List;
 public interface RentalRepository extends JpaRepository<Rent, Long> {
     // Puedes agregar métodos de consulta personalizados si es necesario
     List<Rent> findByTenant_Id(Long tenantId);
+
     List<Rent> findByVehicleId(String vehicleId);
 }

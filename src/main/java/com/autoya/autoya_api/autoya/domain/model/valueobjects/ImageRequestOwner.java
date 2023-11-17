@@ -5,8 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ContractRequest{
-        private String vehicleId;
-        private Long ownerId;
-        private String pdf;
+public class ImageRequestOwner {
+    private String imageUrl;
+    private Long ownerId;
 }

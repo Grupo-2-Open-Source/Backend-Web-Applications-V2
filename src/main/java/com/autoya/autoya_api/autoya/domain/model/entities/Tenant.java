@@ -1,5 +1,6 @@
 package com.autoya.autoya_api.autoya.domain.model.entities;
 
+import com.autoya.autoya_api.autoya.domain.model.aggregate.Images;
 import com.autoya.autoya_api.autoya.domain.model.aggregate.Rent;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
@@ -35,13 +36,15 @@ public class Tenant {
     @Column(nullable = false,unique = true)
     String phoneNumber;
 
-    private String imageurl;
 
     @OneToMany(mappedBy = "tenant")
     private List<Vehicule> vehicles;
 
     @OneToMany(mappedBy = "tenant")
     private List<Rent> rentals;
+
+    @OneToOne(mappedBy = "tenant")
+    private Images images;
     public String getFullName() {
         return firstName + " " + lastName;
     }

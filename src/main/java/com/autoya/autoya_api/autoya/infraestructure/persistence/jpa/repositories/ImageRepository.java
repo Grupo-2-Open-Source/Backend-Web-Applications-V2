@@ -5,8 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ImageRepository extends JpaRepository<Images, Long> {
+public interface ImageRepository extends JpaRepository<Images, String> {
 
     Images findByOwner_Id(Long ownerId);
     Images findByTenant_Id(Long tenantId);
+    Images findByImageUrl(String imageUrl);;
 }
