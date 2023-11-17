@@ -44,8 +44,8 @@ public class MaintenanceController {
     @Autowired
     private MaintenanceService maintenanceService;
 
-    @Operation(summary = "Muestra la lista de nombre de propiestarios que han alquilado algun vehiculo")
-    @GetMapping("/owners/{id}")
+    @Operation(summary = "Muestra la lista de nombres de propiestarios que a los cuales se le ha alquilado algun vehiculo")
+    @GetMapping("/tenant/list-owners/{id}")
     public ResponseEntity<List<String>> findOwnersWithMaintenance(@RequestParam Long tenantId) {
         // Busca al arrendatario (tenant) por su ID
         Optional<Tenant> tenantOptional = tenantRepository.findById(tenantId);
@@ -66,7 +66,7 @@ public class MaintenanceController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @Operation(summary = "Muestra la lista de nombre de propiestarios que han alquilado algun vehiculo")
+    @Operation(summary = "Muestra la lista de nombre de propiestarios a los cuales se le ha alquilado algun vehiculo")
     @PostMapping("/send-maintenance-tenant")
     public ResponseEntity<String> sendMaintenanceReportEmail(@RequestBody MaintenanceRequest maintenanceRequest) {
         // Lógica para guardar la solicitud de mantenimiento en la base de datos

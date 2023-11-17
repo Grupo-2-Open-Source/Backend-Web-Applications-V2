@@ -7,6 +7,7 @@ import com.autoya.autoya_api.autoya.domain.model.entities.Owner;
 import com.autoya.autoya_api.autoya.domain.model.entities.Vehicule;
 import com.autoya.autoya_api.autoya.domain.model.valueobjects.*;
 import com.autoya.autoya_api.autoya.infraestructure.persistence.jpa.repositories.*;
+import com.autoya.autoya_api.autoya.mapper.ResourceNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,7 +37,7 @@ public class VehiculeController {
 
     @Operation(summary = "Registro de vehiculo por el propietario")
     @PostMapping("/owner/register")
-    public ResponseEntity<String> registerVehicle(@RequestBody VehiculeRequest request) {
+    public ResponseEntity<RegisterResponse> registerVehicle(@RequestBody VehiculeRequest request) {
         Vehicule vehicle = new Vehicule();
         vehicle.setBrand(request.getBrand());
         vehicle.setModel(request.getModel());
@@ -51,58 +52,61 @@ public class VehiculeController {
         vehicle.setAmoutthetime(request.getAmoutthetime());
         vehicle.setTime(request.getTime());
         vehicle.setImageUrl(request.getImageUrl());
+
         Long ownerId = request.getOwnerId();
         Owner owner = ownerRepository.findById(ownerId).orElse(null);
         if (owner == null) {
-            return new ResponseEntity<>("Propietario no encontrado.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         vehicle.setOwner(owner);
-        vehicleRepository.save(vehicle);
-        return new ResponseEntity<>("Vehículo registrado correctamente.", HttpStatus.CREATED);
+
+        Vehicule savedVehicle = vehicleRepository.save(vehicle);
+
+        RegisterResponse response = new RegisterResponse();
+        response.setId(savedVehicle.getId());
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @Operation(summary = "Devuelve todos los vehiculos")
-    @GetMapping("/vehicules/all")
+    @GetMapping("/getAllData")
     public ResponseEntity<List<VehiculeResponse>> getAllVehicles() {
 
 
         List<Vehicule> vehicles = vehicleRepository.findAll();
         List<VehiculeResponse> responseList = new ArrayList<>();
         for (Vehicule vehicle : vehicles) {
-            VehiculeResponse response = new VehiculeResponse();
-            response.setId(vehicle.getId());
-            response.setBrand(vehicle.getBrand());
-            response.setModel(vehicle.getModel());
-            response.setMaxVelocity(vehicle.getMaxVelocity());
-            response.setFuelConsumption(vehicle.getFuelConsumption());
-            response.setDimensions(vehicle.getDimensions());
-            response.setWeight(vehicle.getWeight());
-            response.setCarClass(vehicle.getCarClass());
-            response.setCarTransmission(vehicle.getCarTransmission());
-            response.setLocation(vehicle.getLocation());
-            response.setPrice(vehicle.getPrice());
-            response.setAmoutthetime(vehicle.getAmoutthetime());
-            response.setTime(vehicle.getTime());
-            response.setOwnerId(vehicle.getOwner().getId());
-            response.setOwnername(vehicle.getOwner().getFullName());
-            response.setOwnerphone(vehicle.getOwner().getPhoneNumber());
-            response.setImageUrl(vehicle.getImageUrl());
-
-            responseList.add(response);
+            if (vehicle.getRentStatus() != RentStatus.CONFIRMED) {
+                VehiculeResponse response = new VehiculeResponse();
+                response.setId(vehicle.getId());
+                response.setBrand(vehicle.getBrand());
+                response.setModel(vehicle.getModel());
+                response.setMaxVelocity(vehicle.getMaxVelocity());
+                response.setFuelConsumption(vehicle.getFuelConsumption());
+                response.setDimensions(vehicle.getDimensions());
+                response.setWeight(vehicle.getWeight());
+                response.setCarClass(vehicle.getCarClass());
+                response.setCarTransmission(vehicle.getCarTransmission());
+                response.setLocation(vehicle.getLocation());
+                response.setPrice(vehicle.getPrice());
+                response.setAmoutthetime(vehicle.getAmoutthetime());
+                response.setTime(vehicle.getTime());
+                response.setOwnerId(vehicle.getOwner().getId());
+                response.setOwnername(vehicle.getOwner().getFullName());
+                response.setOwnerphone(vehicle.getOwner().getPhoneNumber());
+                response.setImageUrl(vehicle.getImageUrl());
+                responseList.add(response);
+            }
         }
 
         return new ResponseEntity<>(responseList, HttpStatus.OK);
     }
 
     @Operation(summary = "Buscar vehiculos por parametros")
-    @PostMapping("/owner/search")
+    @PostMapping("/tenant/search")
     public ResponseEntity<List<VehiculeResponse>> searchVehicles(@RequestBody VehiculeSearchRequest searchRequest) {
-        List<Vehicule> foundVehicles = vehicleRepository.findByBrandAndModelAndMaxVelocityAndFuelConsumptionAndDimensionsAndWeightAndCarClassAndCarTransmissionAndLocationAndPriceAndTimeAndAmoutthetime(
+        List<Vehicule> foundVehicles = vehicleRepository.findByBrandAndModelAndWeightAndCarClassAndCarTransmissionAndLocationAndPriceAndTimeAndAmoutthetime(
                 searchRequest.getBrand(),
                 searchRequest.getModel(),
-                searchRequest.getMaxVelocity(),
-                searchRequest.getFuelConsumption(),
-                searchRequest.getDimensions(),
                 searchRequest.getWeight(),
                 searchRequest.getCarClass(),
                 searchRequest.getCarTransmission(),
@@ -121,9 +125,6 @@ public class VehiculeController {
         response.setId(vehicule.getId());
         response.setBrand(vehicule.getBrand());
         response.setModel(vehicule.getModel());
-        response.setMaxVelocity(vehicule.getMaxVelocity());
-        response.setFuelConsumption(vehicule.getFuelConsumption());
-        response.setDimensions(vehicule.getDimensions());
         response.setWeight(vehicule.getWeight());
         response.setCarClass(vehicule.getCarClass());
         response.setCarTransmission(vehicule.getCarTransmission());
@@ -137,56 +138,91 @@ public class VehiculeController {
     }
 
     @Operation(summary = "Devuelve todos los vehiculos por el id del owner")
-    @GetMapping("/owner/{ownerId}")
+    @GetMapping("/owner/getAll/{ownerId}")
     public ResponseEntity<List<VehiculeResponse>> getVehiclesByOwnerId(@PathVariable Long ownerId) {
-        Owner owner = ownerRepository.findById(ownerId).orElse(null);
-        if (owner == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        try {
+            Owner owner = ownerRepository.findOwnerById(ownerId);
+
+            if (owner == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            List<Vehicule> ownerVehicles = vehicleRepository.findByOwner_Id(ownerId);
+            List<VehiculeResponse> responseList = new ArrayList<>();
+
+            for (Vehicule vehicule : ownerVehicles) {
+                VehiculeResponse response = mapVehiculeToResponse(vehicule);
+                responseList.add(response);
+            }
+            return new ResponseEntity<>(responseList, HttpStatus.OK);
+        } catch (Exception e) {
+            // Log the exception or handle it according to your needs
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        List<Vehicule> ownerVehicles = vehicleRepository.findByOwner_Id(ownerId);
-        List<VehiculeResponse> responseList =new ArrayList<>();
-        for (Vehicule vehicule : ownerVehicles) {
-            VehiculeResponse response = new VehiculeResponse();
-            response.setId(vehicule.getId());
-            response.setBrand(vehicule.getBrand());
-            response.setModel(vehicule.getModel());
-            response.setMaxVelocity(vehicule.getMaxVelocity());
-            response.setFuelConsumption(vehicule.getFuelConsumption());
-            response.setDimensions(vehicule.getDimensions());
-            response.setWeight(vehicule.getWeight());
-            response.setCarClass(vehicule.getCarClass());
-            response.setCarTransmission(vehicule.getCarTransmission());
-            response.setImageUrl(vehicule.getImageUrl());
-            response.setRentStatus(vehicule.getRentStatus());
-            response.setLocation(vehicule.getLocation());
-            response.setPrice(vehicule.getPrice());
-            response.setTime(vehicule.getTime());
-            response.setAmoutthetime(vehicule.getAmoutthetime());
-            response.setOwnerId(vehicule.getOwner().getId());
-            response.setOwnerphone(vehicule.getOwner().getPhoneNumber());
-            responseList.add(response);
+    }
+    private VehiculeResponse mapVehiculeToResponse(Vehicule vehicule) {
+        VehiculeResponse response = new VehiculeResponse();
+        response.setId(vehicule.getId());
+        response.setBrand(vehicule.getBrand());
+        response.setModel(vehicule.getModel());
+        response.setMaxVelocity(vehicule.getMaxVelocity());
+        response.setFuelConsumption(vehicule.getFuelConsumption());
+        response.setDimensions(vehicule.getDimensions());
+        response.setWeight(vehicule.getWeight());
+        response.setCarClass(vehicule.getCarClass());
+        response.setCarTransmission(vehicule.getCarTransmission());
+        response.setImageUrl(vehicule.getImageUrl());
+        response.setRentStatus(vehicule.getRentStatus());
+        response.setLocation(vehicule.getLocation());
+        response.setPrice(vehicule.getPrice());
+        response.setTime(vehicule.getTime());
+        response.setAmoutthetime(vehicule.getAmoutthetime());
+        response.setOwnerId(vehicule.getOwner().getId());
+        response.setOwnername(vehicule.getOwner().getFullName());
+        response.setOwnerphone(vehicule.getOwner().getPhoneNumber());
+        return response;
+    }
+
+    @Operation(summary = "Devuelve todos los vehiculos alquilados por el arrendatario")
+    @GetMapping("/tenant/rent/{tenantId}")
+    public ResponseEntity<List<VehiculeResponse>> getVehiclesByTenantId(@PathVariable Long tenantId) {
+        // Obtener todos los alquileres del inquilino por su ID
+        List<Rent> tenantRentals = rentalRepository.findByTenant_Id(tenantId);
+        List<VehiculeResponse> responseList = new ArrayList<>();
+
+        for (Rent rent : tenantRentals) {
+            Vehicule vehicle = rent.getVehicle();
+            if (vehicle.getRentStatus() == RentStatus.REQUIRED) {
+                VehiculeResponse vehiculeResponse = mapToResponses(vehicle);
+                responseList.add(vehiculeResponse);
+            }
         }
         return new ResponseEntity<>(responseList, HttpStatus.OK);
     }
 
-
-    @Operation(summary = "Devuelve todos los vehiculos alquilados por el arrendatario")
-    @GetMapping("/tenant/{tenantId}")
-    public ResponseEntity<List<VehiculeResponse>> getVehiclesByTenantId(@PathVariable Long tenantId) {
-        // Obtener todos los alquileres del inquilino por su ID
-        List<Rent> tenantRentals = rentalRepository.findByTenant_Id(tenantId);
-        List<Vehicule> tenantVehicles = tenantRentals.stream()
-                .map(Rent::getVehicle)
-                .collect(Collectors.toList());
-        tenantVehicles = tenantVehicles.stream()
-                .filter(vehicle -> vehicle.getRentStatus() == RentStatus.CONFIRMED)
-                .collect(Collectors.toList());
-        List<VehiculeResponse> responseList = tenantVehicles.stream()
-                .map(this::mapToResponse)
-                .collect(Collectors.toList());
-
-        return new ResponseEntity<>(responseList, HttpStatus.OK);
+    private VehiculeResponse mapToResponses(Vehicule vehicle) {
+        VehiculeResponse response = new VehiculeResponse();
+        response.setId(vehicle.getId());
+        response.setBrand(vehicle.getBrand());
+        response.setModel(vehicle.getModel());
+        response.setMaxVelocity(vehicle.getMaxVelocity());
+        response.setFuelConsumption(vehicle.getFuelConsumption());
+        response.setDimensions(vehicle.getDimensions());
+        response.setWeight(vehicle.getWeight());
+        response.setCarClass(vehicle.getCarClass());
+        response.setCarTransmission(vehicle.getCarTransmission());
+        response.setImageUrl(vehicle.getImageUrl());
+        response.setRentStatus(vehicle.getRentStatus());
+        response.setLocation(vehicle.getLocation());
+        response.setPrice(vehicle.getPrice());
+        response.setTime(vehicle.getTime());
+        response.setAmoutthetime(vehicle.getAmoutthetime());
+        response.setOwnerId(vehicle.getOwner().getId());
+        response.setOwnername(vehicle.getOwner().getFullName());
+        response.setOwnerphone(vehicle.getOwner().getPhoneNumber());
+        return response;
     }
 
 
@@ -208,8 +244,6 @@ public class VehiculeController {
             Contract contract = new Contract();
             contract.setVehicle(vehicule);
             contract.setOwner(owner);
-
-
             contract.setPdf(contractRequest.getPdf());
 
 
@@ -249,35 +283,25 @@ public class VehiculeController {
     }
     @DeleteMapping("/delete/{ownerId}/{vehiculeId}")
     public ResponseEntity<String> deleteVehicule(@PathVariable Long ownerId, @PathVariable String vehiculeId) {
-        // Busca el vehículo que se va a eliminar
         Vehicule vehicule = vehicleRepository.findById(vehiculeId).orElse(null);
 
         if (vehicule == null) {
             return new ResponseEntity<>("Error: Vehículo no encontrado.", HttpStatus.NOT_FOUND);
         }
-
         List<Notification> notifications = notificationRepository.findByVehicleId(vehiculeId);
-
-        // Verificar si existen solicitudes relacionadas con el vehículo
         List<Requests> requests = requestsRepository.findByVehicleId(vehiculeId);
         List<Rent> rents=rentalRepository.findByVehicleId(vehiculeId);
-
-        // Si hay notificaciones o solicitudes relacionadas con el vehículo, eliminarlas primero
-
         if(!rents.isEmpty()){
             rentalRepository.deleteAll(rents);
         }
         if (!notifications.isEmpty()) {
-            // Eliminar notificaciones
             notificationRepository.deleteAll(notifications);
         }
 
         if (!requests.isEmpty()) {
-            // Eliminar solicitudes
             requestsRepository.deleteAll(requests);
         }
 
-        // Luego, eliminar el vehículo
         vehicleRepository.deleteById(vehiculeId);
 
         return new ResponseEntity<>("Vehículo eliminado exitosamente.", HttpStatus.OK);

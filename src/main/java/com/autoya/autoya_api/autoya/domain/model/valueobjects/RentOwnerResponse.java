@@ -9,9 +9,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RentRequest {
-
-    private String vehiculeId;
-    private Long ownerId;
+public class RentOwnerResponse {
+    private Long rentId;
     private Long tenantId;
+    private String imageUrl;
+    private String brand;
+    private String model;
+    private RentStatus rentStatus;
 }

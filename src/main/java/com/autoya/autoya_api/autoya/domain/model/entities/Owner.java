@@ -1,6 +1,7 @@
 package com.autoya.autoya_api.autoya.domain.model.entities;
 
 import com.autoya.autoya_api.autoya.domain.model.aggregate.Contract;
+import com.autoya.autoya_api.autoya.domain.model.aggregate.Images;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import jakarta.persistence.*;
@@ -34,15 +35,14 @@ public class Owner {
     @Column(nullable = false,unique = true)
     private String phoneNumber;
 
-    private String imageurl;
-
-//    @ApiModelProperty(hidden = true)
-//    @JsonIgnore
     @OneToMany(mappedBy = "owner")
     private List<Vehicule> vehicles;
 
     @OneToMany(mappedBy = "owner")
     private List<Contract> contracts;
+
+    @OneToOne(mappedBy = "owner")
+    private Images images;
 
     public String getFullName() {
         return firstName + " " + lastName;

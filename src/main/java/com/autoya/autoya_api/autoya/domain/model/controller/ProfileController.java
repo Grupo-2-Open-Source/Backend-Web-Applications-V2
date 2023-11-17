@@ -1,28 +1,20 @@
 package com.autoya.autoya_api.autoya.domain.model.controller;
 
+import com.autoya.autoya_api.autoya.domain.model.aggregate.CriminalRecords;
 import com.autoya.autoya_api.autoya.domain.model.aggregate.Images;
 import com.autoya.autoya_api.autoya.domain.model.entities.Owner;
 import com.autoya.autoya_api.autoya.domain.model.entities.Tenant;
-import com.autoya.autoya_api.autoya.domain.model.valueobjects.ProfileRequest;
-import com.autoya.autoya_api.autoya.domain.model.valueobjects.ProfileResponse;
+import com.autoya.autoya_api.autoya.domain.model.valueobjects.*;
+import com.autoya.autoya_api.autoya.infraestructure.persistence.jpa.repositories.CriminalRequestsRepository;
 import com.autoya.autoya_api.autoya.infraestructure.persistence.jpa.repositories.ImageRepository;
 import com.autoya.autoya_api.autoya.infraestructure.persistence.jpa.repositories.OwnerRepository;
 import com.autoya.autoya_api.autoya.infraestructure.persistence.jpa.repositories.TenantRepository;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +29,8 @@ public class ProfileController {
 
     @Autowired
     private ImageRepository imageRepository;
+    @Autowired
+    private CriminalRequestsRepository criminalRequestsRepository;
 
     @Operation(summary = "Obtiene el propietario por id")
     @GetMapping("/owner/{id}")
@@ -117,96 +111,83 @@ public class ProfileController {
     }
 
 
-    //cagar imagen
     @Operation(summary = "Registra imagen de perfil de propietario")
-    @PostMapping("/owner/images")
-    public ResponseEntity<String> uploadImageByURL(@RequestParam("imageUrl") String imageUrl,
-            @RequestParam("ownerId") Long ownerId
-    )
-    {
-        // Validaciones y procesamiento de la URL de la imagen
+    @PostMapping("/owner/image")
+    public ResponseEntity<String> uploadImage(@RequestBody ImageRequestOwner imageRequestOwner) {
+        String imageUrl = imageRequestOwner.getImageUrl();
+        Long ownerId = imageRequestOwner.getOwnerId();
         if (imageUrl == null || imageUrl.isEmpty()) {
             return new ResponseEntity<>("Error: La URL de la imagen está vacía.", HttpStatus.BAD_REQUEST);
         }
-
         Owner owner = ownerRepository.findById(ownerId).orElse(null);
         if (owner == null) {
             return new ResponseEntity<>("Error: Propietario no encontrado.", HttpStatus.NOT_FOUND);
         }
-
-        // Guarda la URL de la imagen en tu base de datos.
         Images image = new Images();
         image.setOwner(owner);
         image.setImageUrl(imageUrl);
-
-        // Guarda la entidad en la base de datos (debes tener un repositorio para Images).
         imageRepository.save(image);
-
         return new ResponseEntity<>("Imagen registrada correctamente.", HttpStatus.CREATED);
     }
     @Operation(summary = "Registra imagen de perfil de arrendatario")
-    @PostMapping("/tenant/images")
+    @PostMapping("/tenant/image")
     public ResponseEntity<String> uploadImageByURLs(
-            @RequestParam("imageUrl") String imageUrl,
-            @RequestParam("tenantId") Long tenantId
+            @RequestBody ImageRequestTenant imageRequestTenant
     ) {
-        // Validaciones y procesamiento de la URL de la imagen
+        String imageUrl= imageRequestTenant.getImageUrl();
+        Long tenantId= imageRequestTenant.getTenantId();
         if (imageUrl == null || imageUrl.isEmpty()) {
             return new ResponseEntity<>("Error: La URL de la imagen está vacía.", HttpStatus.BAD_REQUEST);
         }
-
         Tenant tenant = tenantRepository.findById(tenantId).orElse(null);
         if (tenant == null) {
             return new ResponseEntity<>("Error: Arrendatario no encontrado.", HttpStatus.NOT_FOUND);
         }
-
-        // Guarda la URL de la imagen en tu base de datos.
         Images image = new Images();
         image.setTenant(tenant);
         image.setImageUrl(imageUrl);
-
-        // Guarda la entidad en la base de datos (debes tener un repositorio para Images).
         imageRepository.save(image);
-
         return new ResponseEntity<>("Imagen registrada correctamente.", HttpStatus.CREATED);
     }
 
-
     @Operation(summary = "Devuelve imagen de perfil de propietario por id")
-    @GetMapping("/{id}/image-url")
-    public ResponseEntity<String> getImageByOnwerId(@PathVariable Long id) {
+    @GetMapping("/owner/image-url/get/{id}")
+    public ResponseEntity<ImageResponse> getImageByOwnerId(@PathVariable Long id) {
         Images image = imageRepository.findByOwner_Id(id);
         if (image != null) {
-            return new ResponseEntity<>(image.getImageUrl(), HttpStatus.OK);
+            ImageResponse response = new ImageResponse();
+            response.setImageUrl(image.getImageUrl());
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
-        return new ResponseEntity<>("Imagen no encontrada para el ID proporcionado.", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
     @Operation(summary = "Devuelve imagen de perfil de arrendatario por id")
-    @GetMapping("/images/tenant/{tenantId}")
-    public ResponseEntity<Images> getImageByTenantId(@PathVariable Long tenantId) {
-        Images image = imageRepository.findByTenant_Id(tenantId);
-
+    @GetMapping("/tenant/image-url/get/{id}")
+    public ResponseEntity<ImageResponse> getImageByTenantId(@PathVariable Long id) {
+        Images image = imageRepository.findByTenant_Id(id);
         if (image != null) {
-            return new ResponseEntity<>(image, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            ImageResponse response=new ImageResponse();
+            response.setImageUrl(image.getImageUrl());
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
     }
 
-
-    @Operation(summary = "Actualiza imagen de perfil de propietario por id")
-    @PutMapping("/owner/{id}/image-url")
-    public ResponseEntity<String> updateOwnerImageUrl(@PathVariable Long id, @RequestParam("imageUrl") String imageUrl) {
-        Owner owner = ownerRepository.findById(id).orElse(null);
-
+    @Operation(summary = "Actualiza la imagen de perfil de owner")
+    @PutMapping("/owner/image-url/put")
+    public ResponseEntity<String> updateOwnerImageUrl(@RequestBody ImageRequestOwner imageRequestOwner) {
+        String imageUrl = imageRequestOwner.getImageUrl();
+        if (imageUrl == null || imageUrl.isEmpty()) {
+            return new ResponseEntity<>("Error: La URL de la imagen está vacía.", HttpStatus.BAD_REQUEST);
+        }
+        Long ownerId = imageRequestOwner.getOwnerId();
+        Owner owner = ownerRepository.findOwnerById(ownerId);
         if (owner != null) {
-            Images images = imageRepository.findByOwner_Id(id);
-
+            Images images = owner.getImages();
             if (images != null) {
-                images.setImageUrl(imageUrl); // Actualiza la propiedad imageUrl en la entidad Images
+                images.setImageUrl(imageUrl);
                 imageRepository.save(images);
-
                 return new ResponseEntity<>("Imagen del Owner actualizada correctamente.", HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("Imagen del Owner no encontrada.", HttpStatus.NOT_FOUND);
@@ -215,19 +196,20 @@ public class ProfileController {
             return new ResponseEntity<>("Owner no encontrado.", HttpStatus.NOT_FOUND);
         }
     }
-
     @Operation(summary = "Actualiza imagen de perfil de arrendatario por id")
-    @PutMapping("/tenant/{id}/image-url")
-    public ResponseEntity<String> updateTenantImageUrl(@PathVariable Long id, @RequestParam("imageUrl") String imageUrl) {
-        Tenant tenant = tenantRepository.findById(id).orElse(null);
-
+    @PutMapping("/tenant/image-url/put")
+    public ResponseEntity<String> updateTenantImageUrl(@RequestBody ImageRequestTenant imageRequestTenant) {
+        String imageUrl=imageRequestTenant.getImageUrl();
+        if (imageUrl==null|| imageUrl.isEmpty()){
+            return new ResponseEntity<>("Error: La URL de la imagen está vacía.", HttpStatus.BAD_REQUEST);
+        }
+        Long tenantId=imageRequestTenant.getTenantId();
+        Tenant tenant = tenantRepository.findTenantById(tenantId);
         if (tenant != null) {
-            Images images = imageRepository.findByTenant_Id(id);
-
+            Images images = tenant.getImages();
             if (images != null) {
-                images.setImageUrl(imageUrl); // Actualiza la propiedad imageUrl en la entidad Images
+                images.setImageUrl(imageUrl);
                 imageRepository.save(images);
-
                 return new ResponseEntity<>("Imagen del Tenant actualizada correctamente.", HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("Imagen del Tenant no encontrada.", HttpStatus.NOT_FOUND);
@@ -237,23 +219,16 @@ public class ProfileController {
         }
     }
 
-
-    //actualizar datos del profile
     @Operation(summary = "Actualiza los datos de propietario por id")
-    @PutMapping("/owner/{id}/profile")
-    public ResponseEntity<String> updateOwnerProfile(
-            @PathVariable Long id,
-            @RequestParam(required = false) String email,
-            @RequestParam(required = false) String lastName,
-            @RequestParam(required = false) String firstName,
-            @RequestParam(required = false) String phoneNumber
-    ) {
+    @PutMapping("/owner/update/data/profile")
+    public ResponseEntity<String> updateOwnerProfile(@RequestBody UpdateProfileRequest request) {
+        Long id = request.getId();
         Owner owner = ownerRepository.findById(id).orElse(null);
         if (owner != null) {
-            if (email != null) {owner.setEmail(email);}
-            if (lastName != null) {owner.setLastName(lastName);}
-            if (firstName != null) {owner.setFirstName(firstName);}
-            if (phoneNumber != null) {owner.setPhoneNumber(phoneNumber);}
+            if (request.getEmail() != null) {owner.setEmail(request.getEmail());}
+            if (request.getLastName() != null) {owner.setLastName(request.getLastName());}
+            if (request.getFirstName() != null) {owner.setFirstName(request.getFirstName());}
+            if (request.getPhoneNumber() != null) {owner.setPhoneNumber(request.getPhoneNumber());}
             ownerRepository.save(owner);
             return new ResponseEntity<>("Perfil del Owner actualizado correctamente.", HttpStatus.OK);
         } else {
@@ -261,25 +236,42 @@ public class ProfileController {
         }
     }
     @Operation(summary = "Actualiza los datos de arrendatario por id")
-    @PutMapping("/tenant/{id}/profile")
-    public ResponseEntity<String> updateTenantProfile(
-            @PathVariable Long id,
-            @RequestParam(required = false) String email,
-            @RequestParam(required = false) String lastName,
-            @RequestParam(required = false) String firstName,
-            @RequestParam(required = false) String phoneNumber
-    ) {
+    @PutMapping("/tenant/update/data/profile")
+    public ResponseEntity<String> updateTenantProfile(@RequestBody UpdateProfileRequest request) {
+        Long id=request.getId();
         Tenant tenant = tenantRepository.findById(id).orElse(null);
         if (tenant != null) {
-            if (email != null) {tenant.setEmail(email);}
-            if (lastName != null) {tenant.setLastName(lastName);}
-            if (firstName != null) {tenant.setFirstName(firstName);}
-            if (phoneNumber != null) {tenant.setPhoneNumber(phoneNumber);}
+            if (request.getEmail() != null) {tenant.setEmail(request.getEmail());}
+            if (request.getLastName() != null) {tenant.setLastName(request.getLastName());}
+            if (request.getFirstName()!= null) {tenant.setFirstName(request.getFirstName());}
+            if (request.getPhoneNumber() != null) {tenant.setPhoneNumber(request.getPhoneNumber());}
             tenantRepository.save(tenant);
             return new ResponseEntity<>("Perfil del Tenant actualizado correctamente.", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Tenant no encontrado.", HttpStatus.NOT_FOUND);
         }
+    }
+
+
+
+
+    @Operation(summary = "Sube documentos de Antecedentes Penales por id de arrendatario")
+    @PostMapping("/tenant/documents/criminal-records")
+    public ResponseEntity<String> uploadDoc(@RequestBody CriminalRecordsRequests criminalRecordsRequests) {
+        String pdfUrl = criminalRecordsRequests.getPdfUrl();
+        Long tenantId = criminalRecordsRequests.getTenantId();
+        if (pdfUrl == null || pdfUrl.isEmpty()) {
+            return new ResponseEntity<>("Error: La URL del documento está vacía.", HttpStatus.BAD_REQUEST);
+        }
+        Tenant tenant = tenantRepository.findById(tenantId).orElse(null);
+        if (tenant == null) {
+            return new ResponseEntity<>("Error: Arrendatario no encontrado.", HttpStatus.NOT_FOUND);
+        }
+        CriminalRecords criminalRecords = new CriminalRecords();
+        criminalRecords.setTenant(tenant);
+        criminalRecords.setPdf(pdfUrl);
+        criminalRequestsRepository.save(criminalRecords);
+        return new ResponseEntity<>("Documento registrada correctamente.", HttpStatus.CREATED);
     }
 
 }

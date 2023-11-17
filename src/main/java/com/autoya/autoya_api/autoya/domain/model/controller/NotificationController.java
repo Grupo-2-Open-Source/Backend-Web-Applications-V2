@@ -27,7 +27,7 @@ public class NotificationController {
     private NotificationRepository notificationRepository;
     @Autowired
     private OwnerRepository ownerRepository;
-    @Operation(summary = "Devuelve datos de solicitud de alquiler por el owner")
+    @Operation(summary = "Devuelve lista de datos de solicitud de alquiler por el owner")
     @GetMapping("/owner/{ownerId}")
     public ResponseEntity<List<NotificationResponse>> getNotificationsByOwnerId(@PathVariable Long ownerId) {
         List<Notification> notifications = notificationRepository.findByOwner_Id(ownerId);

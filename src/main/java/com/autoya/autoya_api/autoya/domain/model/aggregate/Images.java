@@ -5,14 +5,17 @@ import com.autoya.autoya_api.autoya.domain.model.entities.Tenant;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Getter
 @Setter
 public class Images {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(name = "image_id", unique = true)
+    private String id;
 
     @OneToOne
     @JoinColumn(name = "owner_id")
@@ -22,7 +25,8 @@ public class Images {
     @JoinColumn(name = "tenant_id")
     private Tenant tenant; // Relación con el arrendatario
 
-    private String ImageUrl;
+    private String imageUrl;
+
 
 
 }
