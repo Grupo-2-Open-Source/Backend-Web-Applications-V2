@@ -12,6 +12,8 @@ import lombok.Setter;
 public class RentOwnerResponse {
     private Long rentId;
     private Long tenantId;
+    private String nametenant;
+    private String phonenumber;
     private String imageUrl;
     private String brand;
     private String model;

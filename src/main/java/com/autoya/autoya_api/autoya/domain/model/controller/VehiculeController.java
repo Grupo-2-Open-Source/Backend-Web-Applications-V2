@@ -194,14 +194,13 @@ public class VehiculeController {
 
         for (Rent rent : tenantRentals) {
             Vehicule vehicle = rent.getVehicle();
-            if (vehicle.getRentStatus() == RentStatus.REQUIRED) {
+            if (vehicle.getRentStatus() == RentStatus.REQUIRED ||vehicle.getRentStatus() == RentStatus.CONFIRMED ) {
                 VehiculeResponse vehiculeResponse = mapToResponses(vehicle);
                 responseList.add(vehiculeResponse);
             }
         }
         return new ResponseEntity<>(responseList, HttpStatus.OK);
     }
-
     private VehiculeResponse mapToResponses(Vehicule vehicle) {
         VehiculeResponse response = new VehiculeResponse();
         response.setId(vehicle.getId());
