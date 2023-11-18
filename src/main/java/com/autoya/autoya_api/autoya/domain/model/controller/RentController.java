@@ -56,6 +56,8 @@ public class RentController {
                         .map(rent -> new RentOwnerResponse(
                                 rent.getId(),
                                 rent.getTenant().getId(),
+                                rent.getTenant().getFullName(),
+                                rent.getTenant().getPhoneNumber(),
                                 vehicle.getImageUrl(),
                                 vehicle.getBrand(),
                                 vehicle.getModel(),
