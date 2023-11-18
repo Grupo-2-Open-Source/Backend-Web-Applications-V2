@@ -1,4 +1,4 @@
 package com.autoya.autoya_api.iam.domain.model.queries;
 
-public record GetUserByIdQueries() {
+public record GetUserByIdQueries( Long userId) {
 }

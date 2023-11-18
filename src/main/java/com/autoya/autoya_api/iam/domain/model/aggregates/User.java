@@ -1,4 +1,77 @@
 package com.autoya.autoya_api.iam.domain.model.aggregates;
 
-public class User {
+import com.autoya.autoya_api.iam.domain.model.Entity.Role;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.domain.AbstractAggregateRoot;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+@Entity
+@Getter
+@Setter
+@EntityListeners(AuditingEntityListener.class)
+public class User extends AbstractAggregateRoot<User> {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotBlank
+    @Size(max = 50)
+    @Column(unique = true)
+    private String username;
+
+    @NotBlank
+    @Size(max = 50)
+    private String password;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            joinColumns = @JoinColumn(name="user_id"),
+            inverseJoinColumns = @JoinColumn(name="role_id")
+    )
+    private Set<Role> roles;
+
+    public User() {
+        this.roles = new HashSet<>();
+    }
+
+    private User(String username, String password) {
+        this();
+        this.username = username;
+        this.password = password;
+    }
+
+    public User(String username, String password, List<Role> roles) {
+        this(username, password);
+        addRoles(roles);
+    }
+
+    public User addRoles(Role role) {
+        this.roles.add(role);
+        return this;
+    }
+
+    public User addRoles(List<Role> roles) {
+        var validatedRolesSet = Role.getDefaultRoles(roles);
+        this.roles.addAll(roles);
+        return this;
+    }
+
+    @CreatedDate
+    @Column(nullable = false,updatable = false)
+    private Date createdAt;
+
+    @LastModifiedDate
+    @Column(nullable = false)
+    private Date updatedAt;
 }

@@ -1,4 +1,6 @@
 package com.autoya.autoya_api.iam.domain.model.queries;
 
-public record GetRoleByNameQueries() {
+import com.autoya.autoya_api.iam.domain.model.valueobjects.Roles;
+
+public record GetRoleByNameQueries(Roles name) {
 }
