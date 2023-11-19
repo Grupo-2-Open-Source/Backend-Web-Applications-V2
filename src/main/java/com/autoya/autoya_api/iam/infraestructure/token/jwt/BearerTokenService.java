@@ -10,7 +10,7 @@ public interface BearerTokenService extends TokenService {
      * @param token the HTTP request
      * @return
      */
-    String getBearerToken(HttpServletRequest token);
+    String getBearerTokenFrom(HttpServletRequest token);
 
     /**
      * This method is responsible for generating the JNT token from the authentication object
@@ -18,4 +18,6 @@ public interface BearerTokenService extends TokenService {
      * @return Authentication
      */
     String generateToken(Authentication authentication);
+
+    String generateToken(org.springframework.security.core.Authentication authentication);
 }

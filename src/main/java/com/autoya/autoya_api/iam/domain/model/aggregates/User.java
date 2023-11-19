@@ -31,11 +31,11 @@ public class User extends AbstractAggregateRoot<User> {
     private String username;
 
     @NotBlank
-    @Size(max = 50)
+    @Size(max = 120)
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(
+    @JoinTable(name="user_roles",
             joinColumns = @JoinColumn(name="user_id"),
             inverseJoinColumns = @JoinColumn(name="role_id")
     )
@@ -62,7 +62,7 @@ public class User extends AbstractAggregateRoot<User> {
     }
 
     public User addRoles(List<Role> roles) {
-        var validatedRolesSet = Role.getDefaultRoles(roles);
+        var validatedRolesSet = Role.validateRoleSet(roles);
         this.roles.addAll(roles);
         return this;
     }

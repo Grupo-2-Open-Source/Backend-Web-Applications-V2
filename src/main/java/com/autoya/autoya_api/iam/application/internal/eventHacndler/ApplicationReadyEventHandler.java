@@ -22,7 +22,7 @@ public class ApplicationReadyEventHandler {
     }
 
     @EventListener
-    public void en(ApplicationReadyEvent event) {
+    public void on(ApplicationReadyEvent event) {
         var ApplicationName = event.getApplicationContext().getId();
         LOGGER.info("Starting to verify if rules seeding is needed for {} at {}", ApplicationName, currentTimestamp());
         var seedRolesCommands = new SeedRolesCommands();

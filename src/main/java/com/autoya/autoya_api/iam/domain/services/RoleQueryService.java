@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface RoleQueryService {
     List<Role> handle(GetAllRolesQueries query);
 
-    Optional<Role> handle(GetRoleByNameQueries   query);
+    Optional<Role> handle(GetRoleByNameQueries query);
 }

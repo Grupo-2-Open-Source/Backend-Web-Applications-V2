@@ -20,29 +20,29 @@ public class Role {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(length=20)
+    @Column(length = 20)
     private Roles name;
 
-    public Role(Roles name){
-        this.name=name;
+    public Role(Roles name) {
+        this.name = name;
     }
 
-    public String getStringName(){
+    public String getStringName() {
         return name.name();
     }
 
-    public static Role getDefaultRole_(){
+    public static Role getDefaultRole_() {
         return new Role(Roles.ROLE_TENANT);
     }
 
-    public static Role toRoleFromName(String name){
+    public static Role toRoleFromName(String name) {
         return new Role(Roles.valueOf(name));
     }
 
-    //list
+    // list
 
-    public static List<Role> getDefaultRoles(List<Role> roles){
-        if (roles==null || roles.isEmpty()){
+    public static List<Role> validateRoleSet(List<Role> roles) {
+        if (roles == null || roles.isEmpty()) {
             return List.of(getDefaultRole_());
         }
         return roles;
