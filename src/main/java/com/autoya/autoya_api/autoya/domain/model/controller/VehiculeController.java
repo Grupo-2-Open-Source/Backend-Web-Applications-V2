@@ -5,9 +5,14 @@ import com.autoya.autoya_api.autoya.domain.model.aggregate.Rent;
 import com.autoya.autoya_api.autoya.domain.model.aggregate.Requests;
 import com.autoya.autoya_api.autoya.domain.model.entities.Owner;
 import com.autoya.autoya_api.autoya.domain.model.entities.Vehicule;
+import com.autoya.autoya_api.autoya.domain.model.events.requests.ContractRequest;
+import com.autoya.autoya_api.autoya.domain.model.events.requests.VehiculeRequest;
+import com.autoya.autoya_api.autoya.domain.model.events.requests.VehiculeSearchRequest;
+import com.autoya.autoya_api.autoya.domain.model.events.response.RegisterResponse;
+import com.autoya.autoya_api.autoya.domain.model.events.response.VehiculeResponse;
+import com.autoya.autoya_api.autoya.domain.model.events.response.VehiculeResponseContract;
 import com.autoya.autoya_api.autoya.domain.model.valueobjects.*;
 import com.autoya.autoya_api.autoya.infraestructure.persistence.jpa.repositories.*;
-import com.autoya.autoya_api.autoya.mapper.ResourceNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -241,14 +246,10 @@ public class VehiculeController {
         if (optionalVehicule.isPresent() && optionalOwner.isPresent()) {
             Vehicule vehicule = optionalVehicule.get();
             Owner owner = optionalOwner.get();
-
-
             Contract contract = new Contract();
             contract.setVehicle(vehicule);
             contract.setOwner(owner);
             contract.setPdf(contractRequest.getPdf());
-
-
             contractRepository.save(contract);
 
             return new ResponseEntity<>("Contrato creado exitosamente.", HttpStatus.CREATED);
@@ -293,15 +294,18 @@ public class VehiculeController {
         List<Notification> notifications = notificationRepository.findByVehicleId(vehiculeId);
         List<Requests> requests = requestsRepository.findByVehicleId(vehiculeId);
         List<Rent> rents=rentalRepository.findByVehicleId(vehiculeId);
+        List<Contract> contracts=contractRepository.findByVehicleId(vehiculeId);
         if(!rents.isEmpty()){
             rentalRepository.deleteAll(rents);
         }
         if (!notifications.isEmpty()) {
             notificationRepository.deleteAll(notifications);
         }
-
         if (!requests.isEmpty()) {
             requestsRepository.deleteAll(requests);
+        }
+        if (!contracts.isEmpty()){
+            contractRepository.deleteAll(contracts);
         }
 
         vehicleRepository.deleteById(vehiculeId);

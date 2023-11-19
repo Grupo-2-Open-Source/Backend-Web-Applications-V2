@@ -14,7 +14,6 @@ public class CriminalRecords {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @OneToOne
     @JoinColumn(name = "tenant_id")
     private Tenant tenant;

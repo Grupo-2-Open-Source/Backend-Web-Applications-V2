@@ -1,4 +1,4 @@
-package com.autoya.autoya_api.autoya.domain.model.valueobjects;
+package com.autoya.autoya_api.autoya.domain.model.events.requests;
 
 import com.autoya.autoya_api.autoya.domain.model.entities.Owner;
 import com.autoya.autoya_api.autoya.domain.model.entities.Tenant;

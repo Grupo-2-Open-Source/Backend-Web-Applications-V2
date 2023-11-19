@@ -1,6 +1,9 @@
-package com.autoya.autoya_api.autoya.domain.model.valueobjects;
+package com.autoya.autoya_api.autoya.domain.model.events.requests;
 
 import com.autoya.autoya_api.autoya.domain.model.entities.Owner;
+import com.autoya.autoya_api.autoya.domain.model.valueobjects.CarClass;
+import com.autoya.autoya_api.autoya.domain.model.valueobjects.CarTransmision;
+import com.autoya.autoya_api.autoya.domain.model.valueobjects.RentStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
