@@ -1,10 +1,9 @@
 package com.autoya.autoya_api.autoya.domain.model.controller;
 
 import com.autoya.autoya_api.autoya.domain.model.aggregate.Notification;
-import com.autoya.autoya_api.autoya.domain.model.entities.Owner;
 import com.autoya.autoya_api.autoya.domain.model.entities.Tenant;
 import com.autoya.autoya_api.autoya.domain.model.entities.Vehicule;
-import com.autoya.autoya_api.autoya.domain.model.valueobjects.NotificationResponse;
+import com.autoya.autoya_api.autoya.domain.model.events.response.NotificationResponse;
 import com.autoya.autoya_api.autoya.infraestructure.persistence.jpa.repositories.NotificationRepository;
 import com.autoya.autoya_api.autoya.infraestructure.persistence.jpa.repositories.OwnerRepository;
 import io.swagger.v3.oas.annotations.Operation;

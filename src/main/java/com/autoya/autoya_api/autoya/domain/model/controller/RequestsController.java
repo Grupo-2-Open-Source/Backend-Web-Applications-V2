@@ -2,7 +2,7 @@ package com.autoya.autoya_api.autoya.domain.model.controller;
 import com.autoya.autoya_api.autoya.domain.model.aggregate.Requests;
 import com.autoya.autoya_api.autoya.domain.model.entities.Owner;
 import com.autoya.autoya_api.autoya.domain.model.entities.Vehicule;
-import com.autoya.autoya_api.autoya.domain.model.valueobjects.RequestsResponse;
+import com.autoya.autoya_api.autoya.domain.model.events.response.RequestsResponse;
 import com.autoya.autoya_api.autoya.infraestructure.persistence.jpa.repositories.RequestsRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,29 +1,18 @@
 package com.autoya.autoya_api.autoya.domain.model.controller;
 
-import com.autoya.autoya_api.autoya.domain.model.aggregate.Maintenance;
 import com.autoya.autoya_api.autoya.domain.model.entities.Owner;
 import com.autoya.autoya_api.autoya.domain.model.entities.Tenant;
-import com.autoya.autoya_api.autoya.domain.model.valueobjects.MaintenanceRequest;
-import com.autoya.autoya_api.autoya.domain.model.valueobjects.MaintenanceResponse;
-import com.autoya.autoya_api.autoya.infraestructure.persistence.jpa.repositories.MaintenanceRepository;
+import com.autoya.autoya_api.autoya.domain.model.events.requests.MaintenanceRequest;
 import com.autoya.autoya_api.autoya.infraestructure.persistence.jpa.repositories.OwnerRepository;
 import com.autoya.autoya_api.autoya.infraestructure.persistence.jpa.repositories.TenantRepository;
 import com.autoya.autoya_api.autoya.service.EmailService;
 import com.autoya.autoya_api.autoya.service.MaintenanceService;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

@@ -1,4 +1,4 @@
-package com.autoya.autoya_api.autoya.domain.model.valueobjects;
+package com.autoya.autoya_api.autoya.domain.model.events.requests;
 
 import lombok.Getter;
 import lombok.Setter;
