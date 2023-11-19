@@ -133,6 +133,9 @@ public class VehiculeController {
         response.setAmoutthetime(vehicule.getAmoutthetime());
         response.setTime(vehicule.getTime());
         response.setOwnerId(vehicule.getOwner().getId());
+        response.setOwnername(vehicule.getOwner().getFullName());
+        response.setOwnerphone(vehicule.getOwner().getPhoneNumber());
+        response.setImageUrl(vehicule.getImageUrl());
 
         return response;
     }
