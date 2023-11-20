@@ -20,7 +20,7 @@ public class CorsConig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://autoyadeploy-324fd.web.app")  // Reemplaza con el origen de tu frontend
+                .allowedOrigins("https://autoyadeploy-324fd.web.app")    // Reemplaza con el origen de tu frontend
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
     }
 
