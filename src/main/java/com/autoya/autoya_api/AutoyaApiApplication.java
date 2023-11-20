@@ -2,12 +2,9 @@ package com.autoya.autoya_api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
-/**
- * Main class for launching the Autoya API application.
- * This class is annotated with {@link SpringBootApplication} to enable Spring Boot auto-configuration.
- */
-@SpringBootApplication
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class AutoyaApiApplication {
 
 	public static void main(String[] args) {
