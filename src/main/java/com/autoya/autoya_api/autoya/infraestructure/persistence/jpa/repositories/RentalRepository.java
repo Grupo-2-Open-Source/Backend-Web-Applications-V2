@@ -7,6 +7,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * JPA Repository interface for managing persistence operations related to rentals.
+ * Extends JpaRepository to inherit common CRUD operations.
+ */
 @Repository
 public interface RentalRepository extends JpaRepository<Rent, Long> {
     // Puedes agregar métodos de consulta personalizados si es necesario

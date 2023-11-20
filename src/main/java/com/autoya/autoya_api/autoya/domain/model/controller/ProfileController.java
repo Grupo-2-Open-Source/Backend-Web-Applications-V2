@@ -24,6 +24,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller class for handling profile-related operations.
+ */
 @RestController
 @RequestMapping("/api/v1/profiles")
 public class ProfileController {

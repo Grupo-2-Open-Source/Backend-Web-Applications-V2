@@ -7,6 +7,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
+/**
+ * Represents images associated with either an owner or a tenant in the system.
+ * Stores information about images, including the owner or tenant to whom they are related.
+ */
 @Entity
 @Getter
 @Setter

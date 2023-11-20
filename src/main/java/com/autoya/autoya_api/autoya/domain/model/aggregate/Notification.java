@@ -7,6 +7,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Represents notifications in the system.
+ * Stores information about notifications, including the owner, tenant, vehicle, and rental to whom they are related.
+ */
 @Entity
 @Getter
 @Setter

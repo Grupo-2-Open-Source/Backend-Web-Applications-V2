@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Response class containing information about a rental for the owner.
+ */
 @Getter
 @Setter
 @AllArgsConstructor

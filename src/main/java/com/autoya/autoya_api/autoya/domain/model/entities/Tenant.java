@@ -9,6 +9,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+
+/**
+ * Entity class representing a tenant.
+ */
 @Entity
 @Getter
 @Setter

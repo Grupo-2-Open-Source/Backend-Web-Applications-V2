@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller class for handling requests-related operations.
+ */
 @RestController
 @RequestMapping("/api/v1/requests")
 public class RequestsController {

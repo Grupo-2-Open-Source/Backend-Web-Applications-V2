@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Request class for initiating a vehicle rental. Contains the vehicle ID, owner ID, and tenant ID.
+ */
 @Getter
 @Setter
 @AllArgsConstructor

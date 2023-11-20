@@ -7,6 +7,10 @@ import io.swagger.v3.oas.models.info.License;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configuration class for defining OpenAPI documentation settings.
+ * This class is annotated with {@link Configuration}, indicating its role as a configuration component.
+ */
 @Configuration
 public class OpenAPIConfiguration {
     @Bean

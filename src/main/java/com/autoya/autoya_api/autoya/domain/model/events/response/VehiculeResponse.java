@@ -9,6 +9,9 @@ import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Response class containing information about a vehicle.
+ */
 @Getter
 @Setter
 public class VehiculeResponse {
