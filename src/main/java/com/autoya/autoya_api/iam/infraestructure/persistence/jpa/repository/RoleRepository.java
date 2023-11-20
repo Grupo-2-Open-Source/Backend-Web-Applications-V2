@@ -7,6 +7,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * JPA Repository interface for managing persistence operations related to roles in the IAM (Identity and Access Management) domain.
+ * This interface is responsible for handling role entities.
+ * It declares methods for querying role information, such as finding roles by name and checking the existence of a role by name.
+ */
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
 

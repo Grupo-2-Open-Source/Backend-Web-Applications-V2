@@ -1,10 +1,13 @@
-package com.autoya.autoya_api.autoya.domain.model.valueobjects;
+package com.autoya.autoya_api.autoya.domain.model.events.response;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Response class containing information about a vehicle and its owner for contract page.
+ */
 @Getter
 @Setter
 public class VehiculeResponseContract {

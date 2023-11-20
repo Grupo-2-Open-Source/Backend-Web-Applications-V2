@@ -1,14 +1,8 @@
 package com.autoya.autoya_api.iam.domain.services;
 
-import com.autoya.autoya_api.iam.domain.model.aggregates.User;
-import com.autoya.autoya_api.iam.domain.model.queries.GetAllUsersQueries;
-import com.autoya.autoya_api.iam.domain.model.queries.GetUserByIdQueries;
-
-import java.util.List;
-import java.util.Optional;
-
+/**
+ * Service interface for user-related query operations in the IAM (Identity and Access Management) domain.
+ * This interface declares methods for querying user information.
+ */
 public interface UserQueryService {
-    List<User> handle(GetAllUsersQueries query);
-
-    Optional<User> handle(GetUserByIdQueries query);
 }

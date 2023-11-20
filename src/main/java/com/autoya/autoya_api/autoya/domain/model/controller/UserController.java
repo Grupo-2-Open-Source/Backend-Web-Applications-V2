@@ -2,7 +2,11 @@ package com.autoya.autoya_api.autoya.domain.model.controller;
 
 import com.autoya.autoya_api.autoya.domain.model.entities.Owner;
 import com.autoya.autoya_api.autoya.domain.model.entities.Tenant;
-import com.autoya.autoya_api.autoya.domain.model.valueobjects.*;
+import com.autoya.autoya_api.autoya.domain.model.events.requests.LoginRequest;
+import com.autoya.autoya_api.autoya.domain.model.events.requests.RegisterRequest;
+import com.autoya.autoya_api.autoya.domain.model.events.response.LoginResponse;
+import com.autoya.autoya_api.autoya.domain.model.events.response.RegisterResponseOwner;
+import com.autoya.autoya_api.autoya.domain.model.events.response.RegisterResponseTenant;
 import com.autoya.autoya_api.autoya.infraestructure.persistence.jpa.repositories.OwnerRepository;
 import com.autoya.autoya_api.autoya.infraestructure.persistence.jpa.repositories.TenantRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Controller class for handling user-related operations, such as registration and login.
+ */
 @RestController
 @RequestMapping("/api/v1/user")
 public class UserController {
@@ -22,7 +29,12 @@ public class UserController {
     @Autowired
     private TenantRepository tenantRepository;
 
-
+    /**
+     * POST /api/v1/user/register/owner
+     * <p>Endpoint that created a owner</p>
+     * @param registerRequest  the resource with  the information to create the owner
+     * @return the created owner
+     */
     @Operation(summary = "Registro de propietario")
     @PostMapping("/register/owner")
     public ResponseEntity<RegisterResponseOwner> registerOwner(@RequestBody RegisterRequest registerRequest) {
@@ -41,7 +53,12 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-
+    /**
+     * POST /api/v1/user/register/tenant
+     * <p>Endpoint that created a tenant</p>
+     * @param registerRequest  the resource with  the information to create the tenant
+     * @return the created tenant
+     */
     @Operation(summary = "Registro de arrendatario")
     @PostMapping("/register/tenant")
     public ResponseEntity<RegisterResponseTenant> registerTenant(@RequestBody RegisterRequest registerRequest) {
@@ -56,7 +73,12 @@ public class UserController {
         RegisterResponseTenant response =new RegisterResponseTenant(tenant.getId());
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
+    /**
+     * POST /api/v1/user/register/owner
+     * <p>Endpoint that login</p>
+     * @param loginRequest the resource with  the information to login
+     * @return login
+     */
     @Operation(summary = "Logeo de propietario")
     @PostMapping("/login/owner")
     public ResponseEntity<LoginResponse> loginOwner(@RequestBody LoginRequest loginRequest) {
@@ -68,7 +90,12 @@ public class UserController {
         LoginResponse errorResponse = new LoginResponse( "Fallo de inicio de sesion",null);
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
-
+    /**
+     * POST /api/v1/user/register/tenant
+     * <p>Endpoint that login</p>
+     * @param loginRequest the resource with  the information to login
+     * @return login
+     */
     @Operation(summary = "Logeo de arrendatario")
     @PostMapping("/login/tenant")
     public ResponseEntity<LoginResponse> loginTenant(@RequestBody LoginRequest loginRequest) {

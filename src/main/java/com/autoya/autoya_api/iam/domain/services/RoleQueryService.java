@@ -1,14 +1,8 @@
 package com.autoya.autoya_api.iam.domain.services;
 
-import com.autoya.autoya_api.iam.domain.model.Entity.Role;
-import com.autoya.autoya_api.iam.domain.model.queries.GetAllRolesQueries;
-import com.autoya.autoya_api.iam.domain.model.queries.GetRoleByNameQueries;
-
-import java.util.List;
-import java.util.Optional;
-
+/**
+ * Service interface for role-related query operations in the IAM (Identity and Access Management) domain.
+ * This interface declares methods for querying role information.
+ */
 public interface RoleQueryService {
-    List<Role> handle(GetAllRolesQueries query);
-
-    Optional<Role> handle(GetRoleByNameQueries query);
 }

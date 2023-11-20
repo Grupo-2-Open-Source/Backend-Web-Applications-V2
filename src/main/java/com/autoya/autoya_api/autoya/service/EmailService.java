@@ -4,6 +4,10 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class for handling email-related operations, such as sending emails.
+ * This class is annotated with {@link Service} to indicate its role as a service component.
+ */
 @Service
 public class EmailService {
     private final JavaMailSender javaMailSender;

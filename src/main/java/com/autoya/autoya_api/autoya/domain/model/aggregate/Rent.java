@@ -8,6 +8,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+
+/**
+ * Represents a rental agreement in the system.
+ * Stores information about a rental, including the vehicle, owner, tenant, start date, and end date.
+ */
 @Setter
 @Getter
 @Entity

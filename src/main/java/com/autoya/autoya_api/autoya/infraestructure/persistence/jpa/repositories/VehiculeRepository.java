@@ -7,6 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
+/**
+ * JPA Repository interface for managing persistence operations related to vehicles.
+ * Extends JpaRepository to inherit common CRUD operations.
+ */
 public interface VehiculeRepository extends JpaRepository<Vehicule, String> {
     List<Vehicule>findByBrandAndModelAndWeightAndCarClassAndCarTransmissionAndLocationAndPriceAndTimeAndAmoutthetime(
             String brand,

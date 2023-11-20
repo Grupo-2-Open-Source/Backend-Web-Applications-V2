@@ -4,7 +4,13 @@ import com.autoya.autoya_api.autoya.domain.model.aggregate.CriminalRecords;
 import com.autoya.autoya_api.autoya.domain.model.aggregate.Images;
 import com.autoya.autoya_api.autoya.domain.model.entities.Owner;
 import com.autoya.autoya_api.autoya.domain.model.entities.Tenant;
-import com.autoya.autoya_api.autoya.domain.model.valueobjects.*;
+import com.autoya.autoya_api.autoya.domain.model.events.requests.CriminalRecordsRequests;
+import com.autoya.autoya_api.autoya.domain.model.events.requests.ImageRequestOwner;
+import com.autoya.autoya_api.autoya.domain.model.events.requests.ImageRequestTenant;
+import com.autoya.autoya_api.autoya.domain.model.events.requests.UpdateProfileRequest;
+import com.autoya.autoya_api.autoya.domain.model.events.response.CriminalRecordsResponse;
+import com.autoya.autoya_api.autoya.domain.model.events.response.ImageResponse;
+import com.autoya.autoya_api.autoya.domain.model.events.response.ProfileResponse;
 import com.autoya.autoya_api.autoya.infraestructure.persistence.jpa.repositories.CriminalRequestsRepository;
 import com.autoya.autoya_api.autoya.infraestructure.persistence.jpa.repositories.ImageRepository;
 import com.autoya.autoya_api.autoya.infraestructure.persistence.jpa.repositories.OwnerRepository;
@@ -18,6 +24,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller class for handling profile-related operations.
+ */
 @RestController
 @RequestMapping("/api/v1/profiles")
 public class ProfileController {
@@ -272,6 +281,18 @@ public class ProfileController {
         criminalRecords.setPdf(pdfUrl);
         criminalRequestsRepository.save(criminalRecords);
         return new ResponseEntity<>("Documento registrada correctamente.", HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Obtiene el documento PDF de Antecedentes Penales por id de arrendatario")
+    @GetMapping("/owner/documents/criminal-records-of-tenant/{id}")
+    public ResponseEntity<CriminalRecordsResponse> getPdfByTenantId(@PathVariable Long id) {
+        CriminalRecords criminalRecords = criminalRequestsRepository.findByTenant_Id(id);
+        if (criminalRecords != null) {
+            CriminalRecordsResponse response = new CriminalRecordsResponse();
+            response.setPdf(criminalRecords.getPdf());
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 }

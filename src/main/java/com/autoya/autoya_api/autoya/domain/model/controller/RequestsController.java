@@ -2,7 +2,7 @@ package com.autoya.autoya_api.autoya.domain.model.controller;
 import com.autoya.autoya_api.autoya.domain.model.aggregate.Requests;
 import com.autoya.autoya_api.autoya.domain.model.entities.Owner;
 import com.autoya.autoya_api.autoya.domain.model.entities.Vehicule;
-import com.autoya.autoya_api.autoya.domain.model.valueobjects.RequestsResponse;
+import com.autoya.autoya_api.autoya.domain.model.events.response.RequestsResponse;
 import com.autoya.autoya_api.autoya.infraestructure.persistence.jpa.repositories.RequestsRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +16,21 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller class for handling requests-related operations.
+ */
 @RestController
 @RequestMapping("/api/v1/requests")
 public class RequestsController {
     @Autowired
     private RequestsRepository requestsRepository;
 
-
+    /**
+     * GET /api/v1/requests/tenant/{tenantId}
+     * <p>Endpoint that return list of owner</p>
+     * @param tenantId the resource with  the information the tenant
+     * @return list owner
+     */
     @Operation(summary = "Devuelve una lista de owner a los cuales se les ha enviado la solicitud de alquiler")
     @GetMapping("/tenant/{tenantId}")
     public ResponseEntity<List<RequestsResponse>> getRequestsByTenantId(@PathVariable Long tenantId) {

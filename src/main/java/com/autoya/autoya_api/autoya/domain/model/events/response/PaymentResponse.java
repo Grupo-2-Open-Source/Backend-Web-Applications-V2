@@ -1,10 +1,13 @@
-package com.autoya.autoya_api.autoya.domain.model.valueobjects;
+package com.autoya.autoya_api.autoya.domain.model.events.response;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
 
+/**
+ * Response class containing information about a payment, including price, time, duration, start date, end date, image URL, and location.
+ */
 @Getter
 @Setter
 public class PaymentResponse {

@@ -1,10 +1,14 @@
-package com.autoya.autoya_api.autoya.domain.model.valueobjects;
+package com.autoya.autoya_api.autoya.domain.model.events.response;
 
+import com.autoya.autoya_api.autoya.domain.model.valueobjects.RentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Response class containing information about a rental for the owner.
+ */
 @Getter
 @Setter
 @AllArgsConstructor

@@ -6,6 +6,9 @@ import com.autoya.autoya_api.autoya.domain.model.aggregate.Requests;
 import com.autoya.autoya_api.autoya.domain.model.entities.Owner;
 import com.autoya.autoya_api.autoya.domain.model.entities.Tenant;
 import com.autoya.autoya_api.autoya.domain.model.entities.Vehicule;
+import com.autoya.autoya_api.autoya.domain.model.events.requests.RentRequest;
+import com.autoya.autoya_api.autoya.domain.model.events.response.PaymentResponse;
+import com.autoya.autoya_api.autoya.domain.model.events.response.RentOwnerResponse;
 import com.autoya.autoya_api.autoya.domain.model.valueobjects.*;
 import com.autoya.autoya_api.autoya.infraestructure.persistence.jpa.repositories.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +21,10 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+/**
+ * Controller class for handling rental-related operations.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/rentals")
