@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
 @Entity
 @Getter
 @Setter
@@ -24,6 +25,9 @@ public class User extends AbstractAggregateRoot<User> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+
+
 
     @NotBlank
     @Size(max = 50)
@@ -40,6 +44,9 @@ public class User extends AbstractAggregateRoot<User> {
             inverseJoinColumns = @JoinColumn(name="role_id")
     )
     private Set<Role> roles;
+
+
+
 
     public User() {
         this.roles = new HashSet<>();
