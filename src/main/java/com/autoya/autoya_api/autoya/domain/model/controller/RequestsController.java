@@ -25,7 +25,12 @@ public class RequestsController {
     @Autowired
     private RequestsRepository requestsRepository;
 
-
+    /**
+     * GET /api/v1/requests/tenant/{tenantId}
+     * <p>Endpoint that return list of owner</p>
+     * @param tenantId the resource with  the information the tenant
+     * @return list owner
+     */
     @Operation(summary = "Devuelve una lista de owner a los cuales se les ha enviado la solicitud de alquiler")
     @GetMapping("/tenant/{tenantId}")
     public ResponseEntity<List<RequestsResponse>> getRequestsByTenantId(@PathVariable Long tenantId) {
