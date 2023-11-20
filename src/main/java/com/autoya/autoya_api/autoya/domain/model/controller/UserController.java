@@ -29,7 +29,12 @@ public class UserController {
     @Autowired
     private TenantRepository tenantRepository;
 
-
+    /**
+     * POST /api/v1/user/register/owner
+     * <p>Endpoint that created a owner</p>
+     * @param registerRequest  the resource with  the information to create the owner
+     * @return the created owner
+     */
     @Operation(summary = "Registro de propietario")
     @PostMapping("/register/owner")
     public ResponseEntity<RegisterResponseOwner> registerOwner(@RequestBody RegisterRequest registerRequest) {
@@ -48,7 +53,12 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-
+    /**
+     * POST /api/v1/user/register/tenant
+     * <p>Endpoint that created a tenant</p>
+     * @param registerRequest  the resource with  the information to create the tenant
+     * @return the created tenant
+     */
     @Operation(summary = "Registro de arrendatario")
     @PostMapping("/register/tenant")
     public ResponseEntity<RegisterResponseTenant> registerTenant(@RequestBody RegisterRequest registerRequest) {
@@ -63,7 +73,12 @@ public class UserController {
         RegisterResponseTenant response =new RegisterResponseTenant(tenant.getId());
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
+    /**
+     * POST /api/v1/user/register/owner
+     * <p>Endpoint that login</p>
+     * @param loginRequest the resource with  the information to login
+     * @return login
+     */
     @Operation(summary = "Logeo de propietario")
     @PostMapping("/login/owner")
     public ResponseEntity<LoginResponse> loginOwner(@RequestBody LoginRequest loginRequest) {
@@ -75,7 +90,12 @@ public class UserController {
         LoginResponse errorResponse = new LoginResponse( "Fallo de inicio de sesion",null);
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
-
+    /**
+     * POST /api/v1/user/register/tenant
+     * <p>Endpoint that login</p>
+     * @param loginRequest the resource with  the information to login
+     * @return login
+     */
     @Operation(summary = "Logeo de arrendatario")
     @PostMapping("/login/tenant")
     public ResponseEntity<LoginResponse> loginTenant(@RequestBody LoginRequest loginRequest) {

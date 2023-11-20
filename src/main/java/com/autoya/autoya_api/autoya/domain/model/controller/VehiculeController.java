@@ -13,6 +13,7 @@ import com.autoya.autoya_api.autoya.domain.model.events.response.VehiculeRespons
 import com.autoya.autoya_api.autoya.domain.model.events.response.VehiculeResponseContract;
 import com.autoya.autoya_api.autoya.domain.model.valueobjects.*;
 import com.autoya.autoya_api.autoya.infraestructure.persistence.jpa.repositories.*;
+import io.swagger.annotations.Authorization;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,7 +43,12 @@ public class VehiculeController {
     @Autowired
     private NotificationRepository notificationRepository;
 
-
+    /**
+     * POST /api/v1/vehicles/owner/register
+     * <p>Endpoint that create vehicule</p>
+     * @param request the resource with  the information to create vehicule
+     * @return response
+     */
     @Operation(summary = "Registro de vehiculo por el propietario")
     @PostMapping("/owner/register")
     public ResponseEntity<RegisterResponse> registerVehicle(@RequestBody VehiculeRequest request) {
@@ -74,6 +80,12 @@ public class VehiculeController {
         response.setId(savedVehicle.getId());
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
+    /**
+     * GET /api/v1/vehicles/getAll
+     * <p>Endpoint that return data</p>
+     * @return data
+     */
 
     @Operation(summary = "Devuelve todos los vehiculos")
     @GetMapping("/getAllData")
@@ -108,7 +120,12 @@ public class VehiculeController {
 
         return new ResponseEntity<>(responseList, HttpStatus.OK);
     }
-
+    /**
+     * POST /api/v1/vehicles/tenant/search
+     * <p>Endpoint that search vehicule</p>
+     * @param searchRequest the resource with  the information to search vehicule
+     * @return response
+     */
     @Operation(summary = "Buscar vehiculos por parametros")
     @PostMapping("/tenant/search")
     public ResponseEntity<List<VehiculeResponse>> searchVehicles(@RequestBody VehiculeSearchRequest searchRequest) {
@@ -147,7 +164,12 @@ public class VehiculeController {
 
         return response;
     }
-
+    /**
+     * GET /api/v1/vehicles/owner/getAll
+     * <p>Endpoint that return the list vehicules</p>
+     * @param ownerId the resource with  the information to getall
+     * @return response
+     */
     @Operation(summary = "Devuelve todos los vehiculos por el id del owner")
     @GetMapping("/owner/getAll/{ownerId}")
     public ResponseEntity<List<VehiculeResponse>> getVehiclesByOwnerId(@PathVariable Long ownerId) {
@@ -195,7 +217,12 @@ public class VehiculeController {
         response.setOwnerphone(vehicule.getOwner().getPhoneNumber());
         return response;
     }
-
+    /**
+     * GET /api/v1/vehicles/tenant/rent
+     * <p>Endpoint that return the list vehicules of tenant</p>
+     * @param tenantId the resource with  the information to tenantid
+     * @return response
+     */
     @Operation(summary = "Devuelve todos los vehiculos alquilados por el arrendatario")
     @GetMapping("/tenant/rent/{tenantId}")
     public ResponseEntity<List<VehiculeResponse>> getVehiclesByTenantId(@PathVariable Long tenantId) {
@@ -236,7 +263,12 @@ public class VehiculeController {
     }
 
 
-
+    /**
+     * Post /api/v1/vehicles/register/owner/create-contract
+     * <p>Endpoint that return the list vehicules of tenant</p>
+     * @param contractRequest the resource with  the information to tenantid
+     * @return response
+     */
     @Operation(summary = "Crea contrato de vehiculo de owner por id de owner y de vehiculo")
     @PostMapping("/register/owner/create-contract")
     public ResponseEntity<String> createContract(@RequestBody ContractRequest contractRequest) {
@@ -260,7 +292,11 @@ public class VehiculeController {
             return new ResponseEntity<>("Error: Vehículo u propietario no encontrado.", HttpStatus.NOT_FOUND);
         }
     }
-
+    /**
+     * Post /api/v1/vehicles//owner/{vehicleId}/{ownerId}
+     * <p>Endpoint that return data vehicules of contract</p>
+     * @return response
+     */
     @Operation(summary = "Devolver datos de vehiculo y owner para pagina de contrato")
     @GetMapping("/owner/{vehicleId}/{ownerId}")
     public ResponseEntity<VehiculeResponseContract> getVehiculeAndOwnerDetails(
