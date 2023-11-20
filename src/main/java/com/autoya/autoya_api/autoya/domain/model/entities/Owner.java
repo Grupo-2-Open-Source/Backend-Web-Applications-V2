@@ -10,6 +10,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * Entity class representing a vehicle owner.
+ */
 @Entity
 @Getter
 @Setter

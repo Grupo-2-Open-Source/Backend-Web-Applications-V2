@@ -8,6 +8,11 @@ import org.springframework.stereotype.Repository;
 import javax.management.relation.Role;
 import java.util.Optional;
 
+/**
+ * JPA Repository interface for managing persistence operations related to users in the IAM (Identity and Access Management) domain.
+ * This interface is responsible for handling user entities.
+ * It declares methods for querying user information, such as finding a user by username and checking the existence of a user by username.
+ */
 @Repository
 public interface UserRepository  {
     Optional<User> findByUsername(String username);

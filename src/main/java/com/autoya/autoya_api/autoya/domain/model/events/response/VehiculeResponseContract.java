@@ -5,6 +5,9 @@ import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Response class containing information about a vehicle and its owner for contract page.
+ */
 @Getter
 @Setter
 public class VehiculeResponseContract {

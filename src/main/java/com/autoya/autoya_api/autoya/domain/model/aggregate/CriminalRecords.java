@@ -7,6 +7,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Represents criminal records associated with a tenant in the system.
+ * Stores information about criminal records, linking them to a specific tenant.
+ */
 @Entity
 @Getter
 @Setter

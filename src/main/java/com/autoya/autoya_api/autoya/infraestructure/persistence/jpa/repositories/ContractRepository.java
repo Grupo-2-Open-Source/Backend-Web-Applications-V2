@@ -8,6 +8,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Repository interface for managing persistence operations related to contracts.
+ * This interface extends JpaRepository to inherit common CRUD operations.
+ */
 @Repository
 public interface ContractRepository extends JpaRepository<Contract, Long> {
     Optional<Contract> findByVehicleIdAndOwnerId(String vehicleid, Long ownerId);

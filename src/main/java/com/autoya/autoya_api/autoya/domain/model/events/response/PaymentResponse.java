@@ -5,6 +5,9 @@ import lombok.Setter;
 
 import java.util.Date;
 
+/**
+ * Response class containing information about a payment, including price, time, duration, start date, end date, image URL, and location.
+ */
 @Getter
 @Setter
 public class PaymentResponse {

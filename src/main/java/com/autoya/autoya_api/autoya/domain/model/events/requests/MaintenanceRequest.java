@@ -9,6 +9,9 @@ import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Request class for reporting maintenance issues. Contains information about the owner, tenant, problem type, description, and an optional image URL.
+ */
 @Getter
 @Setter
 public class MaintenanceRequest {

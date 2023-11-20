@@ -8,6 +8,10 @@ import lombok.Setter;
 
 import java.util.Date;
 
+/**
+ * Represents maintenance records in the system.
+ * Stores information about maintenance requests, including the owner or tenant to whom they are related.
+ */
 @Entity
 @Getter
 @Setter

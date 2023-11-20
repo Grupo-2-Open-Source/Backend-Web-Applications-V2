@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Controller class for handling maintenance-related operations.
+ */
 @RestController
 @RequestMapping("/api/v1/maintenances")
 public class MaintenanceController {

@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Represents a contract in the system, associating a vehicle (vehicule) with an owner and storing related information.
+ */
 @Entity
 @Getter
 @Setter

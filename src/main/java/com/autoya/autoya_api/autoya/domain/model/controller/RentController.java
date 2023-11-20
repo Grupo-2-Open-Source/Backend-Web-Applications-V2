@@ -21,6 +21,10 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+/**
+ * Controller class for handling rental-related operations.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/rentals")

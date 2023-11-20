@@ -8,6 +8,10 @@ import com.autoya.autoya_api.autoya.infraestructure.persistence.jpa.repositories
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class for managing maintenance-related operations, such as creating maintenance requests.
+ * This class is annotated with {@link Service} to indicate its role as a service component.
+ */
 @Service
 public class MaintenanceService {
     @Autowired

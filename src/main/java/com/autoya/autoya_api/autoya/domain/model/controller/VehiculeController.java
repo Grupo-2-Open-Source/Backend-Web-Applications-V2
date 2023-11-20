@@ -23,6 +23,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Controller class for managing vehicle-related operations, including registration, search, and retrieval of details.
+ */
 @RestController
 @RequestMapping("/api/v1/vehicles")
 public class VehiculeController {

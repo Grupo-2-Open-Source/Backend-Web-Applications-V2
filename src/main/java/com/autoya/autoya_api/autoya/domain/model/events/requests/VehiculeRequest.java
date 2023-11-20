@@ -10,6 +10,11 @@ import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Request class for registering a new vehicle. Contains details such as brand, model, maximum velocity, fuel consumption,
+ * dimensions, weight, car class, car transmission, rent status, location, price, rental time, rental amount of time,
+ * owner ID, and image URL.
+ */
 @Getter
 @Setter
 public class VehiculeRequest {
